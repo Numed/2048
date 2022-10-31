@@ -140,7 +140,7 @@ export const Square = styled.div`
     color: #f9f6f2;
   }
 
-  &.carrot-contast {
+  &.carrot-contrast {
     background-color: #f75f3b;
     color: #f9f6f2;
   }
