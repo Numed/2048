@@ -31,6 +31,8 @@ const Container = () => {
     swipeUp,
     addNumber,
     cloneDeep,
+    setScore,
+    setGameOver,
     gameOver,
   } = Logic();
 
@@ -49,6 +51,8 @@ const Container = () => {
     addNumber(emptyMatrix);
     addNumber(emptyMatrix);
     setMatrix([...emptyMatrix]);
+    setScore(0);
+    setGameOver(false);
   };
 
   const init = () => {
@@ -60,25 +64,22 @@ const Container = () => {
 
   const handleKeyDown = (e) => {
     if (gameOver) {
+      alert("Game over");
       return;
     }
 
     if (e.key === "ArrowUp") {
       const action = swipeUp(matrix);
       setMatrix([...action]);
-      return;
     } else if (e.key === "ArrowDown") {
       const action = swipeDown(matrix);
       setMatrix([...action]);
-      return;
     } else if (e.key === "ArrowLeft") {
       const action = swipeLeft(matrix);
       setMatrix([...action]);
-      return;
     } else if (e.key === "ArrowRight") {
       const action = swipeRight(matrix);
       setMatrix([...action]);
-      return;
     } else {
       return;
     }

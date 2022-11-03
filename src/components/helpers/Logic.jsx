@@ -5,18 +5,22 @@ export const Logic = () => {
   const [gameOver, setGameOver] = useState(false);
 
   const addNumber = (matrix) => {
+    let counter = 0;
+
     let spotX = Math.floor(Math.random() * 4),
       spotY = Math.floor(Math.random() * 4);
 
     if (matrix[spotX][spotY] === " ") {
       matrix[spotX][spotY] = Math.floor(Math.random() > 0.5) ? 2 : 4;
     }
+    counter++;
 
-    // let checkIsGameOver = checkIfGameOver(matrix);
-    // if (checkIsGameOver) {
-    //   alert("Game over");
-    //   setGameOver(true);
-    // }
+    if (counter > 50) {
+      let checkIsGameOver = checkIfGameOver(matrix);
+      if (checkIsGameOver) {
+        alert("Game over");
+      }
+    }
   };
 
   const cloneDeep = (matrix) => {
@@ -32,171 +36,173 @@ export const Logic = () => {
   const swipeLeft = (matrix) => {
     let newArray = cloneDeep(matrix);
     for (let i = 0; i < 4; i++) {
-      let b = newArray[i];
-      let slow = 0;
-      let fast = 1;
-      while (slow < 4) {
-        if (fast === 4) {
-          fast = slow + 1;
-          slow++;
+      let arr = newArray[i];
+      let prev = 0;
+      let next = 1;
+      while (prev < 4) {
+        if (next === 4) {
+          next = prev + 1;
+          prev++;
           continue;
         }
-        if (b[slow] === " " && b[fast] === " ") {
-          fast++;
-        } else if (b[slow] === " " && b[fast] !== " ") {
-          b[slow] = b[fast];
-          b[fast] = " ";
-          fast++;
-        } else if (b[slow] !== " " && b[fast] === " ") {
-          fast++;
-        } else if (b[slow] !== " " && b[fast] !== " ") {
-          if (b[slow] === b[fast]) {
-            b[slow] = b[slow] + b[fast];
-            let sum = b[slow];
+        if (arr[prev] === " " && arr[next] === " ") {
+          next++;
+        } else if (arr[prev] === " " && arr[next] !== " ") {
+          arr[prev] = arr[next];
+          arr[next] = " ";
+          next++;
+        } else if (arr[prev] !== " " && arr[next] === " ") {
+          next++;
+        } else if (arr[prev] !== " " && arr[next] !== " ") {
+          if (arr[prev] === arr[next]) {
+            arr[prev] = arr[prev] + arr[next];
+            let sum = arr[prev];
             setScore((score) => score + +sum);
-            b[fast] = " ";
-            fast = slow + 1;
-            slow++;
+            arr[next] = " ";
+            next = prev + 1;
+            prev++;
           } else {
-            slow++;
-            fast = slow + 1;
+            prev++;
+            next = prev + 1;
           }
         }
       }
     }
+
     addNumber(newArray);
+
     return newArray;
   };
 
   const swipeRight = (matrix) => {
     let newArray = cloneDeep(matrix);
-
     for (let i = 3; i >= 0; i--) {
-      let b = newArray[i];
-      let slow = b.length - 1;
-      let fast = slow - 1;
-      while (slow > 0) {
-        if (fast === -1) {
-          fast = slow - 1;
-          slow--;
+      let arr = newArray[i];
+      let next = arr.length - 1;
+      let prev = next - 1;
+      while (next > 0) {
+        if (prev === -1) {
+          prev = next - 1;
+          next--;
           continue;
         }
-        if (b[slow] === " " && b[fast] === " ") {
-          fast--;
-        } else if (b[slow] === " " && b[fast] !== " ") {
-          b[slow] = b[fast];
-          b[fast] = " ";
-          fast--;
-        } else if (b[slow] !== " " && b[fast] === " ") {
-          fast--;
-        } else if (b[slow] !== " " && b[fast] !== " ") {
-          if (b[slow] === b[fast]) {
-            b[slow] = b[slow] + b[fast];
-            let sum = b[slow];
+        if (arr[next] === " " && arr[prev] === " ") {
+          prev--;
+        } else if (arr[next] === " " && arr[prev] !== " ") {
+          arr[next] = arr[prev];
+          arr[prev] = " ";
+          prev--;
+        } else if (arr[next] !== " " && arr[prev] === " ") {
+          prev--;
+        } else if (arr[next] !== " " && arr[prev] !== " ") {
+          if (arr[next] === arr[prev]) {
+            arr[next] = arr[next] + arr[prev];
+            let sum = arr[next];
             setScore((score) => score + +sum);
-            b[fast] = " ";
-            fast = slow - 1;
-            slow--;
+            arr[prev] = " ";
+            prev = next - 1;
+            next--;
           } else {
-            slow--;
-            fast = slow - 1;
+            next--;
+            prev = next - 1;
           }
         }
       }
     }
 
     addNumber(newArray);
+
     return newArray;
   };
 
   const swipeDown = (matrix) => {
-    let b = cloneDeep(matrix);
+    let arr = cloneDeep(matrix);
     let oldData = JSON.parse(JSON.stringify(matrix));
     for (let i = 3; i >= 0; i--) {
-      let slow = b.length - 1;
-      let fast = slow - 1;
-      while (slow > 0) {
-        if (fast === -1) {
-          fast = slow - 1;
-          slow--;
+      let next = arr.length - 1;
+      let prev = next - 1;
+      while (next > 0) {
+        if (prev === -1) {
+          prev = next - 1;
+          next--;
           continue;
         }
-        if (b[slow][i] === " " && b[fast][i] === " ") {
-          fast--;
-        } else if (b[slow][i] === " " && b[fast][i] !== " ") {
-          b[slow][i] = b[fast][i];
-          b[fast][i] = " ";
-          fast--;
-        } else if (b[slow][i] !== " " && b[fast][i] === " ") {
-          fast--;
-        } else if (b[slow][i] !== " " && b[fast][i] !== " ") {
-          if (b[slow][i] === b[fast][i]) {
-            b[slow][i] = b[slow][i] + b[fast][i];
-            let sum = b[slow][i];
+        if (arr[next][i] === " " && arr[prev][i] === " ") {
+          prev--;
+        } else if (arr[next][i] === " " && arr[prev][i] !== " ") {
+          arr[next][i] = arr[prev][i];
+          arr[prev][i] = " ";
+          prev--;
+        } else if (arr[next][i] !== " " && arr[prev][i] === " ") {
+          prev--;
+        } else if (arr[next][i] !== " " && arr[prev][i] !== " ") {
+          if (arr[next][i] === arr[prev][i]) {
+            arr[next][i] = arr[next][i] + arr[prev][i];
+            let sum = arr[next][i];
             setScore((score) => score + +sum);
-            b[fast][i] = " ";
-            fast = slow - 1;
-            slow--;
+            arr[prev][i] = " ";
+            prev = next - 1;
+            next--;
           } else {
-            slow--;
-            fast = slow - 1;
+            next--;
+            prev = next - 1;
           }
         }
       }
     }
-    if (JSON.stringify(b) !== JSON.stringify(oldData)) {
-      addNumber(b);
+    if (JSON.stringify(arr) !== JSON.stringify(oldData)) {
+      addNumber(arr);
     }
-    return b;
+    return arr;
   };
 
   const swipeUp = (matrix) => {
-    let b = cloneDeep(matrix);
+    let arr = cloneDeep(matrix);
     let oldData = JSON.parse(JSON.stringify(matrix));
     for (let i = 0; i < 4; i++) {
-      let slow = 0;
-      let fast = 1;
-      while (slow < 4) {
-        if (fast === 4) {
-          fast = slow + 1;
-          slow++;
+      let prev = 0;
+      let next = 1;
+      while (prev < 4) {
+        if (next === 4) {
+          next = prev + 1;
+          prev++;
           continue;
         }
-        if (b[slow][i] === " " && b[fast][i] === " ") {
-          fast++;
-        } else if (b[slow][i] === " " && b[fast][i] !== " ") {
-          b[slow][i] = b[fast][i];
-          b[fast][i] = " ";
-          fast++;
-        } else if (b[slow][i] !== " " && b[fast][i] === " ") {
-          fast++;
-        } else if (b[slow][i] !== " " && b[fast][i] !== " ") {
-          if (b[slow][i] === b[fast][i]) {
-            b[slow][i] = b[slow][i] + b[fast][i];
-            let sum = b[slow][i];
+        if (arr[prev][i] === " " && arr[next][i] === " ") {
+          next++;
+        } else if (arr[prev][i] === " " && arr[next][i] !== " ") {
+          arr[prev][i] = arr[next][i];
+          arr[next][i] = " ";
+          next++;
+        } else if (arr[prev][i] !== " " && arr[next][i] === " ") {
+          next++;
+        } else if (arr[prev][i] !== " " && arr[next][i] !== " ") {
+          if (arr[prev][i] === arr[next][i]) {
+            arr[prev][i] = arr[prev][i] + arr[next][i];
+            let sum = arr[prev][i];
             setScore((score) => score + +sum);
-            b[fast][i] = " ";
-            fast = slow + 1;
-            slow++;
+            arr[next][i] = " ";
+            next = prev + 1;
+            prev++;
           } else {
-            slow++;
-            fast = slow + 1;
+            prev++;
+            next = prev + 1;
           }
         }
       }
     }
-    if (JSON.stringify(oldData) !== JSON.stringify(b)) {
-      addNumber(b);
+    if (JSON.stringify(oldData) !== JSON.stringify(arr)) {
+      addNumber(arr);
     }
 
-    return b;
+    return arr;
   };
 
   const checkIfGameOver = (matrix) => {
-    let checker = swipeLeft(),
-      checker2 = swipeDown(),
-      checker3 = swipeRight(),
-      checker4 = swipeUp();
+    let checker = swipeLeft(matrix),
+      checker2 = swipeDown(matrix),
+      checker3 = swipeRight(matrix),
+      checker4 = swipeUp(matrix);
 
     if (JSON.stringify(matrix) !== JSON.stringify(checker)) {
       return false;
@@ -210,7 +216,6 @@ export const Logic = () => {
     if (JSON.stringify(matrix) !== JSON.stringify(checker4)) {
       return false;
     }
-
     return true;
   };
 

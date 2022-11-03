@@ -65,7 +65,8 @@ export const TotalScore = styled.span`
   font-size: 25px;
   color: #fff;
   margin-top: 8px;
-  font-weight: bold;
+  font-weight: 700;
+  transition: all 0.2s linear;
 `;
 
 export const RestartButton = styled.button`
